@@ -107,6 +107,7 @@ zerops:
       deployFiles:
         - ./src
         - ./pom.xml
+        - ./zerops.yaml
         - target/app.jar
 
       cache: true
