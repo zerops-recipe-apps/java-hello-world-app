@@ -1,0 +1,57 @@
+# The 'prod' setup compiles an optimized Spring Boot fat JAR
+# for deployment. The 'dev' setup ships source code alongside
+# the pre-built JAR so developers can SSH in, edit files, and
+# rebuild freely using the pre-installed mvn and java tools.
+zerops:
+  - setup: prod
+    build:
+      base: java@21
+      buildCommands:
+        - mvn clean package -DskipTests
+      deployFiles:
+        - target/app.jar
+      cache: true
+    deploy:
+      readinessCheck:
+        httpGet:
+          port: 8080
+          path: /
+    run:
+      base: java@21
+      initCommands:
+        - zsc execOnce ${appVersionId} -- java -Dloader.main=io.zerops.recipe.Migrate -jar target/app.jar
+      ports:
+        - port: 8080
+          httpSupport: true
+      envVariables:
+        DB_NAME: db
+        DB_HOST: ${db_hostname}
+        DB_PORT: ${db_port}
+        DB_USER: ${db_user}
+        DB_PASS: ${db_password}
+      start: java -jar target/app.jar
+  - setup: dev
+    build:
+      base: java@21
+      buildCommands:
+        - mvn clean package -DskipTests
+      deployFiles:
+        - ./src
+        - ./pom.xml
+        - ./zerops.yaml
+        - target/app.jar
+      cache: true
+    run:
+      base: java@21
+      initCommands:
+        - zsc execOnce ${appVersionId} -- java -Dloader.main=io.zerops.recipe.Migrate -jar target/app.jar
+      ports:
+        - port: 8080
+          httpSupport: true
+      envVariables:
+        DB_NAME: db
+        DB_HOST: ${db_hostname}
+        DB_PORT: ${db_port}
+        DB_USER: ${db_user}
+        DB_PASS: ${db_password}
+      start: zsc noop --silent
