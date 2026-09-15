@@ -8,7 +8,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.3.5</version>
+    <version>3.4.7</version>
     <relativePath/>
   </parent>
 
@@ -17,6 +17,12 @@
   <version>1.0.0</version>
   <name>java-hello-world</name>
   <description>Java Hello World recipe for Zerops</description>
+
+  <scm>
+    <url>https://github.com/zerops-recipe-apps/java-hello-world-app</url>
+    <connection>scm:git:https://github.com/zerops-recipe-apps/java-hello-world-app.git</connection>
+    <developerConnection>scm:git:https://github.com/zerops-recipe-apps/java-hello-world-app.git</developerConnection>
+  </scm>
 
   <properties>
     <java.version>21</java.version>
